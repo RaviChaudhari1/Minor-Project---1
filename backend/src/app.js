@@ -33,6 +33,8 @@ app.get("/", (req, res) => {
 
 import userRouter from "./routes/user.route.js";
 import lectureRouter from "./routes/lecture.route.js";
+import classRouter from "./routes/class.route.js";
+
 
 
 // route declaration
@@ -40,6 +42,8 @@ app.use("/api/users", userRouter)
 // app.use("/api/users", require("./routes/userRoutes"));
 
 app.use("/api/lectures", lectureRouter)
+
+app.use("/api/classes", classRouter)
 
 
 

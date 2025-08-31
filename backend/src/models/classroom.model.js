@@ -24,4 +24,4 @@ classSchema.post("save", async function (doc) {
 });
 
 const Classroom = mongoose.model("Classroom", classSchema);
-export { Classroom };
+export  {Classroom}

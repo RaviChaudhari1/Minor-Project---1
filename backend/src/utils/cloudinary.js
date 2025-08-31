@@ -1,3 +1,4 @@
+// utils/cloudinary.js
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
@@ -7,25 +8,24 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
 const uploadOnCloudinary = async (localFilePath) => {
-    try {
-        if (!localFilePath) return null;
-        // upload file on cloudinary
-        const response = await cloudinary.uploader.upload(localFilePath, {resource_type: "auto"})
-        console.log("cloudinary response: ",response, response.url);
-        
-        // file has been uploaded on cloudinary
-        console.log("file uploaded on cd");
-        // for only url return response.url
-        fs.unlinkSync(localFilePath) 
-        return response;
-        
-    } catch (error) {
-        fs.unlinkSync(localFilePath) // remove locally saved file if the upload fails
-        return null;
-    }
-}
+  try {
+    if (!localFilePath) return null;
 
+    // Upload to Cloudinary
+    const response = await cloudinary.uploader.upload(localFilePath, {
+      resource_type: "auto",
+    });
 
-export {uploadOnCloudinary};
+    // Delete file from local storage after upload
+    fs.unlinkSync(localFilePath);
+
+    return response; // includes secure_url
+  } catch (error) {
+    fs.unlinkSync(localFilePath); // remove file if error occurs
+    console.error("Cloudinary upload error:", error);
+    return null;
+  }
+};
+
+export { uploadOnCloudinary };

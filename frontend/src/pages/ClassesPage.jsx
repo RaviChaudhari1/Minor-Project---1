@@ -1,6 +1,27 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function ClassesPage() {
+  const [classes, setClasses] = useState([]);
+  const API = import.meta.env.VITE_API_URL;
+
+  // Color palettes for variety
+  const colors = [
+    { bg: "bg-blue-50", border: "border-blue-200", title: "text-blue-800", subtitle: "text-blue-600" },
+    { bg: "bg-green-50", border: "border-green-200", title: "text-green-800", subtitle: "text-green-600" },
+    { bg: "bg-purple-50", border: "border-purple-200", title: "text-purple-800", subtitle: "text-purple-600" },
+    { bg: "bg-pink-50", border: "border-pink-200", title: "text-pink-800", subtitle: "text-pink-600" },
+    { bg: "bg-yellow-50", border: "border-yellow-200", title: "text-yellow-800", subtitle: "text-yellow-600" },
+  ];
+
+  useEffect(() => {
+    axios
+      .get(`${API}/classes/get-classes`)
+      .then((res) => setClasses(res.data))
+      .catch((err) => console.error("Error fetching classes:", err));
+  }, [API]);
+
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-md p-6">
@@ -17,32 +38,29 @@ export default function ClassesPage() {
           Manage your classroom and course materials here.
         </p>
 
+        {/* Render classes dynamically */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Link to="/lectures/mathematics-101">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 hover:shadow-md cursor-pointer">
-              <h3 className="font-semibold text-blue-800">Mathematics 101</h3>
-              <p className="text-sm text-blue-600">Advanced Calculus</p>
-              <p className="text-xs text-gray-500 mt-2">25 students enrolled</p>
-            </div>
-          </Link>
-
-          <Link to="/lectures/physics-201">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 hover:shadow-md cursor-pointer">
-              <h3 className="font-semibold text-green-800">Physics 201</h3>
-              <p className="text-sm text-green-600">Quantum Mechanics</p>
-              <p className="text-xs text-gray-500 mt-2">18 students enrolled</p>
-            </div>
-          </Link>
-
-          <Link to="/lectures/chemistry-101">
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 hover:shadow-md cursor-pointer">
-              <h3 className="font-semibold text-purple-800">Chemistry 101</h3>
-              <p className="text-sm text-purple-600">Organic Chemistry</p>
-              <p className="text-xs text-gray-500 mt-2">22 students enrolled</p>
-            </div>
-          </Link>
+          {classes.map((cls, index) => {
+            const color = colors[index % colors.length]; // cycle through colors
+            return (
+              <Link key={cls._id} to={`/lectures/${cls._id}`}>
+                <div
+                  className={`${color.bg} ${color.border} border rounded-lg p-4 hover:shadow-md cursor-pointer`}
+                >
+                  <h3 className={`font-semibold ${color.title}`}>{cls.name}</h3>
+                  <p className={`text-sm ${color.subtitle}`}>
+                    {cls.subject || "No subject"}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    {cls.students?.length || 0} students enrolled
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
   );
 }
+

@@ -1,14 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function CreateLecturePage() {
-  const [form, setForm] = useState({
-    title: "",
-    date: "",
-    description: "",
-    audio: "",
-    classId: ""
-  });
   const { classId } = useParams();
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
@@ -17,31 +11,38 @@ export default function CreateLecturePage() {
   const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Here you’d send lecture data to your backend or global state
-    console.log("New Lecture:", { title, date, description, audio, classId });
-    // setForm({ ...form, [e.target.name]: e.target.value });
-    // setError(""); 
-    const lectureData = {
-      title,
-      description,
-      date,
-      audio,
-    };
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("date", date);
+    formData.append("description", description);
+    if (audio) formData.append("audio", audio);
 
     try {
-      const res = await axios.post(`${API}/lectures/${classId}/create`, lectureData, { withCredentials: true });
+      const token = localStorage.getItem("token"); // 🔑 Get token from localStorage
+
+      const res = await axios.post(
+        `${API}/lectures/${classId}/create`,
+        formData,
+        {
+          withCredentials: true, // still send cookies if needed
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // ✅ Attach token
+          },
+        }
+      );
+
       console.log("Lecture created:", res.data);
       navigate(`/lectures/${classId}`);
-    }catch(err){
-      console.error("Create lecture error:", err.response?.data || err.message);
-      
+    } catch (err) {
+      console.error(
+        "Create lecture error:",
+        err.response?.data || err.message
+      );
     }
-    // Redirect back to lecture list
-    navigate(`/lectures/${classId}`);
   };
 
   return (
@@ -90,7 +91,9 @@ export default function CreateLecturePage() {
 
         {/* Upload File */}
         <div>
-          <label className="block text-gray-700 mb-1">Upload Audio (Optional)</label>
+          <label className="block text-gray-700 mb-1">
+            Upload Audio (Optional)
+          </label>
           <input
             type="file"
             accept="audio/*"
@@ -110,3 +113,6 @@ export default function CreateLecturePage() {
     </div>
   );
 }
+
+
+// TODO - start by creaating create class feature then populate the class on classroom app then crete lecture and pass mongodb class id as slug on create lecture url

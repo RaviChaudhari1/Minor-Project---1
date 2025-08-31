@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function CreateClassPage() {
   const [name, setName] = useState("");
@@ -7,14 +8,33 @@ export default function CreateClassPage() {
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Save class (you can connect this with backend later)
-    console.log("New Class:", { name, subject, description });
+    try {
+      const token = localStorage.getItem("token");
+      // console.log(token);
+      
 
-    // After creating, redirect back to classes page
-    navigate("/");
+      const res = await axios.post("http://localhost:5000/api/classes/create-class", {
+        name,
+        subject,
+        description,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ attach token
+        },
+      }
+    );
+
+      console.log("Class created:", res.data);
+
+      // After success → redirect
+      navigate("/");
+    } catch (error) {
+      console.error("Error creating class:", error);
+    }
   };
 
   return (
