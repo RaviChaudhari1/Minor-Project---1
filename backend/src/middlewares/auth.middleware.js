@@ -36,7 +36,7 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
         req.user = user; // attach user to request object
         next();
     } catch (error) {
-        throw new ApiError(401, error?.messsage || "Unauthorized - Invalid token");
+        throw new ApiError(401, error?.message || "Unauthorized - Invalid token");
     }
 
 })

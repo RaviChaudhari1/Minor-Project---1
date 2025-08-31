@@ -9,13 +9,13 @@ import jwt from "jsonwebtoken";
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
-    console.log("user found for token generation: ", user);
+    // console.log("user found for token generation: ", user);
 
     const accessToken = user.generateAccessToken();
-    console.log("Access Token generated: ", accessToken);
+    // console.log("Access Token generated: ", accessToken);
 
     const refreshToken = user.generateRefreshToken();
-    console.log("Refresh Token generated: ", refreshToken);
+    // console.log("Refresh Token generated: ", refreshToken);
 
     user.refreshToken = refreshToken;
     // passing validateBeforeSave: false to avoid re-validation of the user schema (password required)
