@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const classSchema = new Schema({
+const classroomSchema = new Schema({
   name: { type: String, required: true },
   subject: { type: String, required: true },
   teacher: {
@@ -17,11 +17,11 @@ const classSchema = new Schema({
 }, { timestamps: true });
 
 // Middleware → automatically push classId to User's classesTeaching
-classSchema.post("save", async function (doc) {
+classroomSchema.post("save", async function (doc) {
   await mongoose.model("User").findByIdAndUpdate(doc.teacher, {
     $addToSet: { classesTeaching: doc._id }
   });
 });
 
-const Classroom = mongoose.model("Classroom", classSchema);
+const Classroom = mongoose.model("Classroom", classroomSchema);
 export  {Classroom}

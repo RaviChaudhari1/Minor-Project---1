@@ -4,6 +4,7 @@ const lectureSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String },
   date: { type: Date, default: Date.now },
+  audioUrl: { type: String },   // ✅ added field
   createdBy: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -11,20 +12,14 @@ const lectureSchema = new Schema({
   },
   classroom: {
     type: Schema.Types.ObjectId,
-    ref: "Class",
+    ref: "Classroom",  // ✅ correct model
     required: true
-  },
-  resources: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Resource"
-    }
-  ]
+  }
 }, { timestamps: true });
 
-// Middleware → link lecture to class
+// Middleware → link lecture to classroom
 lectureSchema.post("save", async function (doc) {
-  await mongoose.model("Class").findByIdAndUpdate(doc.classroom, {
+  await mongoose.model("Classroom").findByIdAndUpdate(doc.classroom, {
     $addToSet: { lectures: doc._id }
   });
 });
