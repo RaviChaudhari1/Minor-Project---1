@@ -4,7 +4,7 @@ import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import { 
   ClassesPage, LecturePage, StudentsPage, CreateClassPage,
-  TodayLecturesPage, CreateLecturePage, LectureDetailPage 
+  TodayLecturesPage, CreateLecturePage, LectureDetailPage, EditLecturePage 
 } from "./pages";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -61,9 +61,10 @@ export default function App() {
           // Protected Routes
           <Route element={<Layout user={user} />}>
             <Route path="/" element={<ClassesPage user={user} />} />
-            <Route path="/lectures/:classId" element={<LecturePage user={user} />} />
-            <Route path="/lectures/:classId/:lectureId" element={<LectureDetailPage user={user} />} />
-            <Route path="/lectures/:classId/create" element={<CreateLecturePage user={user} />} />
+            <Route path="/lectures/:className" element={<LecturePage user={user} />} />
+            <Route path="/lectures/:className/:lectureId" element={<LectureDetailPage user={user} />} />
+            <Route path="/lectures/:className/:lectureId/edit" element={<EditLecturePage user={user} />} />
+            <Route path="/lectures/:className/create" element={<CreateLecturePage user={user} />} />
             <Route path="/students" element={<StudentsPage user={user} />} />
             <Route path="/today-lectures" element={<TodayLecturesPage user={user} />} />
             <Route path="/create-class" element={<CreateClassPage user={user} />} />

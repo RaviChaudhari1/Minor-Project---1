@@ -5,5 +5,6 @@ import CreateClassPage from "./CreateClassPage";
 import TodayLecturesPage from "./TodayLecturesPage";
 import CreateLecturePage from "./CreateLecturePage";
 import LectureDetailPage from "./LectureDetailPage";
+import EditLecturePage from "./EditLecturePage";
 
-export {ClassesPage, LecturePage, StudentsPage, CreateClassPage, TodayLecturesPage, CreateLecturePage, LectureDetailPage}
+export {ClassesPage, LecturePage, StudentsPage, CreateClassPage, TodayLecturesPage, CreateLecturePage, LectureDetailPage, EditLecturePage}

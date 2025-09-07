@@ -43,7 +43,7 @@ export default function ClassesPage() {
           {classes.map((cls, index) => {
             const color = colors[index % colors.length]; // cycle through colors
             return (
-              <Link key={cls._id} to={`/lectures/${cls._id}`}>
+              <Link key={cls._id} to={`/lectures/${cls.name}`}>
                 <div
                   className={`${color.bg} ${color.border} border rounded-lg p-4 hover:shadow-md cursor-pointer`}
                 >

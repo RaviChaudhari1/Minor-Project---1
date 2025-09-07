@@ -6,12 +6,12 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const createLecture = async (req, res) => {
   try {
-    const { classId } = req.params;
+    const { className } = req.params;
     const { title, description, date } = req.body;
     const userId = req.user._id;
 
-    // Check class exists
-    const classroom = await Classroom.findById(classId);
+    // Check class exists by name
+    const classroom = await Classroom.findOne({ name: className });
     if (!classroom) {
       return res.status(404).json({ error: "Class not found" });
     }
@@ -45,7 +45,7 @@ const createLecture = async (req, res) => {
       date,
       audioUrl,
       createdBy: userId,
-      classroom: classId,
+      classroom: classroom._id,
     });
 
     await lecture.save();
