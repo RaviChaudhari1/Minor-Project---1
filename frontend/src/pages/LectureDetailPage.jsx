@@ -15,18 +15,12 @@ export default function LectureDetailPage({ user }) {
       try {
         const token = localStorage.getItem("token");
         
-        // Fetch lecture
+        // Fetch lecture and classroom info
         const lectureResponse = await axios.get(`${API}/lectures/${className}/${lectureId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setLecture(lectureResponse.data);
-
-        // Fetch classroom info to check if user is teacher
-        const classesResponse = await axios.get(`${API}/classes/get-classes`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const foundClass = classesResponse.data.find(cls => cls.name === className);
-        setClassroom(foundClass);
+        setLecture(lectureResponse.data.lecture);
+        setClassroom(lectureResponse.data.classroom);
       } catch (error) {
         console.error("Error fetching data:", error);
         setLecture(null);
@@ -56,7 +50,9 @@ export default function LectureDetailPage({ user }) {
     }
   };
 
-  const isTeacher = classroom && user && String(classroom.teacher) === String(user._id);
+  // Try different ways to access teacher ID
+  const teacherId = classroom?.teacher?._id || classroom?.teacher;
+  const isTeacher = classroom && user && String(teacherId) === String(user._id);
 
   if (loading) {
     return (

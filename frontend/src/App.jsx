@@ -3,13 +3,13 @@ import Layout from "./components/Layout";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import { 
-  ClassesPage, LecturePage, StudentsPage, CreateClassPage,
+  ClassesPage, LecturePage, StudentsPage, CreateClassPage, EditClassPage,
   TodayLecturesPage, CreateLecturePage, LectureDetailPage, EditLecturePage 
 } from "./pages";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const API = "http://localhost:5000/api"; // adjust if backend URL changes
+const API = import.meta.env.VITE_API_URL;
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,8 +31,9 @@ export default function App() {
         const res = await axios.get(`${API}/users/current-user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        console.log("App User:", res);
         setIsAuthenticated(true);
-        setUser(res.data.user); // store user info from backend
+        setUser(res.data.data); // store user info from backend
       } catch (err) {
         console.error("Auth check failed:", err.response?.data || err.message);
         localStorage.removeItem("token");
@@ -65,6 +66,7 @@ export default function App() {
             <Route path="/lectures/:className/:lectureId" element={<LectureDetailPage user={user} />} />
             <Route path="/lectures/:className/:lectureId/edit" element={<EditLecturePage user={user} />} />
             <Route path="/lectures/:className/create" element={<CreateLecturePage user={user} />} />
+            <Route path="/classes/:classId/edit" element={<EditClassPage user={user} />} />
             <Route path="/students" element={<StudentsPage user={user} />} />
             <Route path="/today-lectures" element={<TodayLecturesPage user={user} />} />
             <Route path="/create-class" element={<CreateClassPage user={user} />} />

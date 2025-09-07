@@ -14,8 +14,8 @@ router.get("/:className", verifyJWT, async (req, res) => {
   try {
     const { className } = req.params;
     
-    // Find classroom by name
-    const classroom = await Classroom.findOne({ name: className });
+    // Find classroom by name and populate teacher
+    const classroom = await Classroom.findOne({ name: className }).populate("teacher", "name email _id");
     if (!classroom) {
       return res.status(404).json({ error: "Class not found" });
     }
@@ -25,7 +25,7 @@ router.get("/:className", verifyJWT, async (req, res) => {
       .populate("createdBy", "name email")
       .sort({ date: -1 });
 
-    res.status(200).json(lectures);
+    res.status(200).json({ lectures, classroom });
   } catch (error) {
     console.error("Error fetching lectures:", error);
     res.status(500).json({ error: "Server error" });
@@ -37,8 +37,8 @@ router.get("/:className/:lectureId", verifyJWT, async (req, res) => {
   try {
     const { className, lectureId } = req.params;
     
-    // Find classroom by name
-    const classroom = await Classroom.findOne({ name: className });
+    // Find classroom by name and populate teacher
+    const classroom = await Classroom.findOne({ name: className }).populate("teacher", "name email _id");
     if (!classroom) {
       return res.status(404).json({ error: "Class not found" });
     }
@@ -53,7 +53,7 @@ router.get("/:className/:lectureId", verifyJWT, async (req, res) => {
       return res.status(404).json({ error: "Lecture not found" });
     }
 
-    res.status(200).json(lecture);
+    res.status(200).json({ lecture, classroom });
   } catch (error) {
     console.error("Error fetching lecture:", error);
     res.status(500).json({ error: "Server error" });

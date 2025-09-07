@@ -21,7 +21,7 @@ export default function EditLecturePage() {
           headers: { Authorization: `Bearer ${token}` },
         });
         
-        const lecture = response.data;
+        const lecture = response.data.lecture;
         setTitle(lecture.title);
         setDate(lecture.date.split('T')[0]); // Format date for input
         setDescription(lecture.description || "");
