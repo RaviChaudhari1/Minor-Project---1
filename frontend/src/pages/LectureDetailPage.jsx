@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import AudioList from "../components/AudioList";
 
 export default function LectureDetailPage({ user }) {
   const { className, lectureId } = useParams();
@@ -14,11 +15,14 @@ export default function LectureDetailPage({ user }) {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        
+
         // Fetch lecture and classroom info
-        const lectureResponse = await axios.get(`${API}/lectures/${className}/${lectureId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const lectureResponse = await axios.get(
+          `${API}/lectures/${className}/${lectureId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setLecture(lectureResponse.data.lecture);
         setClassroom(lectureResponse.data.classroom);
       } catch (error) {
@@ -42,7 +46,7 @@ export default function LectureDetailPage({ user }) {
       await axios.delete(`${API}/lectures/${className}/${lectureId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       navigate(`/lectures/${className}`);
     } catch (error) {
       console.error("Error deleting lecture:", error);
@@ -65,9 +69,7 @@ export default function LectureDetailPage({ user }) {
   if (!lecture) {
     return (
       <div className="p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-xl font-bold text-gray-700">
-          Lecture not found.
-        </h2>
+        <h2 className="text-xl font-bold text-gray-700">Lecture not found.</h2>
       </div>
     );
   }
@@ -77,9 +79,11 @@ export default function LectureDetailPage({ user }) {
       <div className="flex justify-between items-start">
         <div>
           <h2 className="text-2xl font-bold text-gray-800">{lecture.title}</h2>
-          <p className="text-gray-600 italic">📅 {new Date(lecture.date).toLocaleDateString()}</p>
+          <p className="text-gray-600 italic">
+            📅 {new Date(lecture.date).toLocaleDateString()}
+          </p>
         </div>
-        
+
         {isTeacher && (
           <div className="flex gap-2">
             <Link
@@ -121,6 +125,10 @@ export default function LectureDetailPage({ user }) {
             <source src={lecture.audioUrl} type="audio/mp3" />
             Your browser does not support the audio element.
           </audio>
+          <AudioList
+            audioFiles={audioFiles}
+            onAudioUpdate={handleTranscriptionUpdate}
+          />
         </div>
       )}
     </div>

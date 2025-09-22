@@ -21,9 +21,9 @@ export default function Sidebar({ expanded }) {
           <Calendar size={20} />
           {expanded && <span>Schedule</span>}
         </Link>
-        <Link to="/today-lectures" className="flex items-center gap-3">
+        <Link to="/lectures/today" className="flex items-center gap-3">
           <FileText size={20} />
-          {expanded && <span>Lectures</span>}
+          {expanded && <span>Today's Lectures</span>}
         </Link>
         <Link to="/settings" className="flex items-center gap-3">
           <Settings size={20} />

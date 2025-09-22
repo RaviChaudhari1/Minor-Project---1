@@ -7,5 +7,6 @@ import TodayLecturesPage from "./TodayLecturesPage";
 import CreateLecturePage from "./CreateLecturePage";
 import LectureDetailPage from "./LectureDetailPage";
 import EditLecturePage from "./EditLecturePage";
+import SettingPage from "./SettingPage";
 
-export {ClassesPage, LecturePage, StudentsPage, CreateClassPage, EditClassPage, TodayLecturesPage, CreateLecturePage, LectureDetailPage, EditLecturePage}
+export {ClassesPage, LecturePage, StudentsPage, CreateClassPage, EditClassPage, TodayLecturesPage, CreateLecturePage, LectureDetailPage, EditLecturePage, SettingPage}

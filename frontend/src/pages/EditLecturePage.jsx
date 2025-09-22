@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect,  } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 
 export default function EditLecturePage() {
@@ -12,6 +12,8 @@ export default function EditLecturePage() {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
+  const location = useLocation();  // <-- get state
+  const redirectBack = !location.state?.fromToday; // only redirect if not from today
 
   useEffect(() => {
     const fetchLecture = async () => {
@@ -62,7 +64,11 @@ export default function EditLecturePage() {
       );
 
       console.log("Lecture updated:", res.data);
-      navigate(`/lectures/${className}`);
+      if (redirectBack) {
+        navigate(`/lectures/${className}`); // normal lectures page
+      } else {
+        navigate(-1); // go back to previous page (TodayLecturesPage)
+      }
     } catch (err) {
       console.error(
         "Update lecture error:",
