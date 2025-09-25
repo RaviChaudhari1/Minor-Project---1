@@ -9,6 +9,39 @@ import { Lecture } from "../models/lecture.model.js";
 
 const router = Router();
 
+// GET today's lectures (no params needed)
+router.get("/today", verifyJWT, async (req, res) => {
+  console.log("helloo");
+  
+  try {
+    // Get today's start and end time
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    
+
+    // Find lectures created today
+    const lectures = await Lecture.find({
+      createdAt: { $gte: startOfDay, $lte: endOfDay }
+    })
+      .populate("classroom", "name") // show class name
+      .populate("createdBy", "name email"); // show teacher info
+
+      console.log("lecture data", lectures);
+      
+    if (!lectures || lectures.length === 0) {
+      return res.status(404).json({ message: "No lectures found for today" });
+    }
+
+    res.status(200).json({ lectures });
+  } catch (error) {
+    console.error("Error fetching today’s lectures:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 // Get lectures for a specific class
 router.get("/:className", verifyJWT, async (req, res) => {
   try {
@@ -59,6 +92,9 @@ router.get("/:className/:lectureId", verifyJWT, async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+
+
 
 // Upload single file under field name "audio"
 router.post("/:className/create", verifyJWT, upload.single("audio"), createLecture);

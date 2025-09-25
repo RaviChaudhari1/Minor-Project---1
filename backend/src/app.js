@@ -35,6 +35,7 @@ import userRouter from "./routes/user.route.js";
 import lectureRouter from "./routes/lecture.route.js";
 import classRouter from "./routes/class.route.js";
 
+// import transcriptionRoutes from './routes/transcription.js';
 
 
 // route declaration
@@ -44,6 +45,8 @@ app.use("/api/users", userRouter)
 app.use("/api/lectures", lectureRouter)
 
 app.use("/api/classes", classRouter)
+
+// app.use('/api/transcription', transcriptionRoutes);
 
 
 

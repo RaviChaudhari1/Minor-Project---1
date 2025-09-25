@@ -1,7 +1,9 @@
 import { useState } from "react";
 import useTheme from "../contexts/themeContext";
 
-export default function SettingsPage({ user }) {
+export default function SettingsPage({ user }) { 
+  console.log(user);
+  
   const [notifications, setNotifications] = useState(true);
   const [name, setName] = useState(user.fullName);
   const [email, setEmail] = useState(user.email);
@@ -104,16 +106,6 @@ export default function SettingsPage({ user }) {
           <div className="p-6 space-y-4">
             <h2 className="text-xl font-semibold text-[#ca3500]">Security</h2>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Change Password
-              </label>
-              <input
-                type="password"
-                placeholder="New password"
-                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#ca3500] outline-none"
-              />
-            </div>
 
             <button className="bg-[#ca3500] text-white px-4 py-2 rounded-lg hover:bg-[#a32a00] transition">
               Update Password
