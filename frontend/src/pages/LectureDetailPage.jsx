@@ -24,6 +24,8 @@ export default function LectureDetailPage({ user }) {
           }
         );
         setLecture(lectureResponse.data.lecture);
+        console.log(lectureResponse.data.lecture);
+        
         setClassroom(lectureResponse.data.classroom);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -125,10 +127,7 @@ export default function LectureDetailPage({ user }) {
             <source src={lecture.audioUrl} type="audio/mp3" />
             Your browser does not support the audio element.
           </audio>
-          <AudioList
-            audioFiles={audioFiles}
-            onAudioUpdate={handleTranscriptionUpdate}
-          />
+
         </div>
       )}
     </div>

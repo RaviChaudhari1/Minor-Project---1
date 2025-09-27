@@ -1,2 +1,4 @@
 node_modules
 node_modules/
+transcription-service/.env
+./transcription-service/.env

@@ -14,6 +14,9 @@ const lectureSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Classroom",  // ✅ correct model
     required: true
+  },
+  transcription:{
+    type: String 
   }
 }, { timestamps: true });
 

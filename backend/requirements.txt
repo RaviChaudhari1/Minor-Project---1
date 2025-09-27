@@ -1,0 +1,4 @@
+faster-whisper
+requests
+
+# pip install -r requirements.txt
